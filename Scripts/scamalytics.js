@@ -115,24 +115,23 @@ $task.fetch(requestParams).then(response => { // 发送请求并处理响应
 
         // 准备HTML内容以在QX面板中显示
         const resultHtml = `
-        <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding-left: 5ch;">
+        <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
             <br> <!-- 添加一个空行 -->
             
-            <b>IP地址：</b>${scamInfo.ip}<br> <!-- 显示IP地址 -->
-            <b>IP欺诈分数：</b>${scamInfo.score}<br> <!-- 显示IP欺诈分数 -->
-            <b>IP风险等级：</b>${riskemoji} ${riskDescription}<br> <!-- 显示风险等级及其表情 -->
-            <b>IP城市：</b>${scamInfo.ip_city}<br> <!-- 显示IP所在城市 -->
-            <b>IP国家：</b>${countryFlag} ${countryCode}<br> <!-- 显示IP国家及其旗帜 -->
-            <b>ISP名称：</b>${scamInfo['ISP Name']}<br> <!-- 显示ISP名称 -->
-            <b>ISP欺诈分数：</b>${scamInfo['ISP Fraud Score']}<br> <!-- 显示ISP欺诈分数 -->
-            <b>ASN编号：</b>${scamInfo.as_number}<br> <!-- 显示ASN编号 -->
-            <b>ASN机构：</b>${scamInfo['Organization Name']}<br> <!-- 显示ASN机构名称 -->
+            <b style="margin-left: 5ch;">IP地址：</b>${scamInfo.ip}<br> <!-- 显示IP地址 -->
+            <b style="margin-left: 5ch;">IP欺诈分数：</b>${scamInfo.score}<br> <!-- 显示IP欺诈分数 -->
+            <b style="margin-left: 5ch;">IP风险等级：</b>${riskemoji} ${riskDescription}<br> <!-- 显示风险等级及其表情 -->
+            <b style="margin-left: 5ch;">IP城市：</b>${scamInfo.ip_city}<br> <!-- 显示IP所在城市 -->
+            <b style="margin-left: 5ch;">IP国家：</b>${countryFlag} ${countryCode}<br> <!-- 显示IP国家及其旗帜 -->
+            <b style="margin-left: 5ch;">ISP名称：</b>${scamInfo['ISP Name']}<br> <!-- 显示ISP名称 -->
+            <b style="margin-left: 5ch;">ISP欺诈分数：</b>${scamInfo['ISP Fraud Score']}<br> <!-- 显示ISP欺诈分数 -->
+            <b style="margin-left: 5ch;">ASN编号：</b>${scamInfo.as_number}<br> <!-- 显示ASN编号 -->
+            <b style="margin-left: 5ch;">ASN机构：</b>${scamInfo['Organization Name']}<br> <!-- 显示ASN机构名称 -->
             
             <br> <!-- 添加一个空行 -->
-            <b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span> <!-- 显示当前节点名称 -->
+            <b style="color: red; margin-left: 5ch;">节点：</b> ➟ <span style="color: red;">${nodeName}</span> <!-- 显示当前节点名称 -->
         </p>
     `;
-
 
         // 将结果显示在QX面板上
         $done({ // 完成请求，返回结果
