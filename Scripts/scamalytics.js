@@ -132,7 +132,7 @@ $task.fetch(requestParams).then(response => { // 发送请求并处理响应
             <b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span> <!-- 显示当前节点名称 -->
         </p>
     `;
-    
+
         // 将结果显示在QX面板上
         $done({ // 完成请求，返回结果
             title: "IP欺诈分查询", // 设置面板标题
