@@ -115,7 +115,7 @@ $task.fetch(requestParams).then(response => { // 发送请求并处理响应
 
         // 准备HTML内容以在QX面板中显示
         const resultHtml = `
-        <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+        <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; padding-left: 5ch;">
             <br> <!-- 添加一个空行 -->
             
             <b>IP地址：</b>${scamInfo.ip}<br> <!-- 显示IP地址 -->
@@ -132,6 +132,7 @@ $task.fetch(requestParams).then(response => { // 发送请求并处理响应
             <b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span> <!-- 显示当前节点名称 -->
         </p>
     `;
+    
 
         // 将结果显示在QX面板上
         $done({ // 完成请求，返回结果
