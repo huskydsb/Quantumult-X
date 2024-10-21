@@ -116,6 +116,8 @@ $task.fetch(requestParams).then(response => { // 发送请求并处理响应
         // 准备HTML内容以在QX面板中显示
 const resultHtml = `
     <p>
+        <br> <!-- 添加一个空行 -->
+        
         <b>IP地址：</b>${scamInfo.ip}<br> <!-- 显示IP地址 -->
         <b>IP欺诈分数：</b>${scamInfo.score}<br> <!-- 显示IP欺诈分数 -->
         <b>IP风险等级：</b>${riskemoji} ${riskDescription}<br> <!-- 显示风险等级及其表情 -->
