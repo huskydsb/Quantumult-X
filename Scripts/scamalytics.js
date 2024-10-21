@@ -118,21 +118,20 @@ $task.fetch(requestParams).then(response => { // 发送请求并处理响应
         <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
             <br> <!-- 添加一个空行 -->
             
-            <div style="padding-left: 5ch;"><b>IP地址：</b>${scamInfo.ip}</div> <!-- 显示IP地址 -->
-            <div style="padding-left: 5ch;"><b>IP欺诈分数：</b>${scamInfo.score}</div> <!-- 显示IP欺诈分数 -->
-            <div style="padding-left: 5ch;"><b>IP风险等级：</b>${riskemoji} ${riskDescription}</div> <!-- 显示风险等级及其表情 -->
-            <div style="padding-left: 5ch;"><b>IP城市：</b>${scamInfo.ip_city}</div> <!-- 显示IP所在城市 -->
-            <div style="padding-left: 5ch;"><b>IP国家：</b>${countryFlag} ${countryCode}</div> <!-- 显示IP国家及其旗帜 -->
-            <div style="padding-left: 5ch;"><b>ISP名称：</b>${scamInfo['ISP Name']}</div> <!-- 显示ISP名称 -->
-            <div style="padding-left: 5ch;"><b>ISP欺诈分数：</b>${scamInfo['ISP Fraud Score']}</div> <!-- 显示ISP欺诈分数 -->
-            <div style="padding-left: 5ch;"><b>ASN编号：</b>${scamInfo.as_number}</div> <!-- 显示ASN编号 -->
-            <div style="padding-left: 5ch;"><b>ASN机构：</b>${scamInfo['Organization Name']}</div> <!-- 显示ASN机构名称 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP地址：</b>${scamInfo.ip}<br> <!-- 显示IP地址 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP欺诈分数：</b>${scamInfo.score}<br> <!-- 显示IP欺诈分数 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP风险等级：</b>${riskemoji} ${riskDescription}<br> <!-- 显示风险等级及其表情 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP城市：</b>${scamInfo.ip_city}<br> <!-- 显示IP所在城市 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP国家：</b>${countryFlag} ${countryCode}<br> <!-- 显示IP国家及其旗帜 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP名称：</b>${scamInfo['ISP Name']}<br> <!-- 显示ISP名称 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP欺诈分数：</b>${scamInfo['ISP Fraud Score']}<br> <!-- 显示ISP欺诈分数 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN编号：</b>${scamInfo.as_number}<br> <!-- 显示ASN编号 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN机构：</b>${scamInfo['Organization Name']}<br> <!-- 显示ASN机构名称 -->
             
             <br> <!-- 添加一个空行 -->
-            <div style="padding-left: 5ch;"><b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span></div> <!-- 显示当前节点名称 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span> <!-- 显示当前节点名称 -->
         </p>
     `;
-
 
         // 将结果显示在QX面板上
         $done({ // 完成请求，返回结果
