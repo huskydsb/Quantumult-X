@@ -119,15 +119,17 @@ $task.fetch(requestParams).then(response => { // 发送请求并处理响应
             <br> <!-- 添加一个空行 -->
             
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP地址：</b>${scamInfo.ip}<br> <!-- 显示IP地址 -->
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP欺诈分数：</b>${scamInfo.score}<br> <!-- 显示IP欺诈分数 -->
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP风险等级：</b>${riskemoji} ${riskDescription}<br> <!-- 显示风险等级及其表情 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP城市：</b>${scamInfo.ip_city}<br> <!-- 显示IP所在城市 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP国家：</b>${countryFlag} ${countryCode}<br> <!-- 显示IP国家及其旗帜 -->
+            <br> <!-- 添加一个空行 -->           
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP欺诈分数：</b>${scamInfo.score}<br> <!-- 显示IP欺诈分数 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP风险等级：</b>${riskemoji} ${riskDescription}<br> <!-- 显示风险等级及其表情 -->
+            <br> <!-- 添加一个空行 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP名称：</b>${scamInfo['ISP Name']}<br> <!-- 显示ISP名称 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP欺诈分数：</b>${scamInfo['ISP Fraud Score']}<br> <!-- 显示ISP欺诈分数 -->
+            <br> <!-- 添加一个空行 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN编号：</b>${scamInfo.as_number}<br> <!-- 显示ASN编号 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN机构：</b>${scamInfo['Organization Name']}<br> <!-- 显示ASN机构名称 -->
-            
             <br> <!-- 添加一个空行 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span> <!-- 显示当前节点名称 -->
         </p>
