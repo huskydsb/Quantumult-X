@@ -53,6 +53,7 @@ var flags = new Map([
 
 const ipUrl = "http://ip-api.com/json/";
 const scamUrl = "https://api11.scamalytics.com/shaoxinweixuer/?key=3d803bd1825826b88353d677e37d5f54ee5685e242347e88b8159c103bbc5ef1&ip=";
+const timeoutDuration = 5000; // 5秒超时
 
 const nodeName = $environment.params || '未知节点';
 
@@ -66,7 +67,14 @@ const requestParams = {
     }
 };
 
-$task.fetch(requestParams).then(response => {
+function fetchWithTimeout(requestParams) {
+    return Promise.race([
+        $task.fetch(requestParams),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('查询超时')), timeoutDuration))
+    ]);
+}
+
+fetchWithTimeout(requestParams).then(response => {
     const ipInfo = JSON.parse(response.body);
     const ip = ipInfo.query;
 
@@ -80,7 +88,7 @@ $task.fetch(requestParams).then(response => {
         }
     };
 
-    $task.fetch(scamRequestParams).then(response => {
+    fetchWithTimeout(scamRequestParams).then(response => {
         const scamInfo = JSON.parse(response.body);
         const countryCode = scamInfo.ip_country_code;
         const countryFlag = flags.get(countryCode) || '';
