@@ -117,6 +117,20 @@ fetchWithTimeout(requestParams).then(response => {
                 riskDescription = '未知风险';
         }
 
+        // 输出查询结果到控制台
+        console.log(`
+            IP地址: ${scamInfo.ip}
+            IP城市: ${scamInfo.ip_city}
+            IP国家: ${countryFlag} ${countryCode}
+            IP欺诈分数: ${scamInfo.score}
+            IP风险等级: ${riskemoji} ${riskDescription}
+            ISP欺诈分数: ${scamInfo['ISP Fraud Score']}
+            ISP公司名称: ${scamInfo['ISP Name']}
+            ASN编号: ${scamInfo.as_number}
+            ASN机构: ${scamInfo['Organization Name']}
+            节点: ${nodeName}
+        `);
+
         const resultHtml = `
         <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
             <br>
