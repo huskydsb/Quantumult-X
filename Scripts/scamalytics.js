@@ -116,13 +116,12 @@ $task.fetch(requestParams).then(response => { // 发送请求并处理响应
         // 准备HTML内容以在QX面板中显示
         const resultHtml = `
         <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
-            <br> <!-- 添加一个空行 -->
-            
+            <br> <!-- 添加一个空行 -->            
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP地址：</b>${scamInfo.ip}<br> <!-- 显示IP地址 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP城市：</b>${scamInfo.ip_city}<br> <!-- 显示IP所在城市 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP国家：</b>${countryFlag} ${countryCode}<br> <!-- 显示IP国家及其旗帜 -->
             <br> <!-- 添加一个空行 -->           
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP欺诈分数：</b>${scamInfo.score}<br> <!-- 显示IP欺诈分数 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP欺诈分数：</b>&nbsp;&nbsp;${scamInfo.score}<br> <!-- 显示IP欺诈分数 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP风险等级：</b>${riskemoji} ${riskDescription}<br> <!-- 显示风险等级及其表情 -->
             <br> <!-- 添加一个空行 -->
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP欺诈分数：</b>${scamInfo['ISP Fraud Score']}<br> <!-- 显示ISP欺诈分数 -->
