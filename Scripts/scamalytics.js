@@ -240,7 +240,7 @@ var flags = new Map([
     // 可以继续添加更多国家
 ]);
 
-const ipUrl = "https://api.ipapi.is/?q=";
+const ipUrl = "http://ip-api.com/json";
 const scamUrl = "https://api11.scamalytics.com/shaoxinweixuer/?key=3d803bd1825826b88353d677e37d5f54ee5685e242347e88b8159c103bbc5ef1&ip=";
 const timeoutDuration = 5000; // 5秒超时
 
@@ -283,8 +283,7 @@ fetchWithTimeout(requestParams)
         fetchWithTimeout(scamRequestParams)
             .then((response) => {
                 const scamInfo = JSON.parse(response.body);
-                const country = ipInfo.location.country || "N/A";
-                const countryCode = ipInfo.location.country_code || "N/A";
+                const countryCode = scamInfo.ip_country_code;
                 const countryFlag = flags.get(countryCode) || "";
 
                 let riskemoji;
@@ -313,31 +312,31 @@ fetchWithTimeout(requestParams)
 
                 // 输出查询结果到控制台
                 console.log(`节点名称: ${nodeName}`);
-                console.log(`IP地址: ${ipInfo.ip}`);
-                console.log(`IP城市: ${ipInfo.location.city}`);
-                console.log(`IP国家: ${countryFlag} ${country}`);
-                console.log(`IP欺诈分数: ${scamInfo.score || "N/A"}`);
+                console.log(`IP地址: ${scamInfo.ip}`);
+                console.log(`IP城市: ${scamInfo.ip_city}`);
+                console.log(`IP国家: ${countryFlag} ${countryCode}`);
+                console.log(`IP欺诈分数: ${scamInfo.score}`);
                 console.log(`IP风险等级: ${riskemoji} ${riskDescription}`);
-                console.log(`ISP欺诈分数: ${scamInfo["ISP Fraud Score"] || "N/A"}`);
-                console.log(`ISP公司名称: ${ipInfo.company.name}`);
-                console.log(`ASN编号: ${ipInfo.asn.asn}`);
-                console.log(`ASN机构: ${ipInfo.asn.org}`);
+                console.log(`ISP欺诈分数: ${scamInfo["ISP Fraud Score"]}`);
+                console.log(`ISP公司名称: ${scamInfo["ISP Name"]}`);
+                console.log(`ASN编号: ${scamInfo.as_number}`);
+                console.log(`ASN机构: ${scamInfo["Organization Name"]}`);
 
                 const resultHtml = `
         <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP地址：</b>${ipInfo.ip}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP城市：</b>${ipInfo.location.city}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP国家：</b>${countryFlag} ${country}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP地址：</b>${scamInfo.ip}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP城市：</b>${scamInfo.ip_city}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP国家：</b>${countryFlag} ${countryCode}<br>
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP欺诈分数：</b>&nbsp;&nbsp;${scamInfo.score}<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP风险等级：</b>${riskemoji} ${riskDescription}<br>
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP欺诈分数：</b>${scamInfo["ISP Fraud Score"]}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP公司名称：</b>${ipInfo.company.name}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP公司名称：</b>${scamInfo["ISP Name"]}<br>
             <br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN编号：</b>${ipInfo.asn.asn}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN机构：</b>${ipInfo.asn.org}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN编号：</b>${scamInfo.as_number}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN机构：</b>${scamInfo["Organization Name"]}<br>
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span>
         </p>
