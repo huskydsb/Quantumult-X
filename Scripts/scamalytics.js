@@ -312,6 +312,7 @@ fetchWithTimeout(requestParams)
         }
 
         // 输出查询结果到控制台
+        console.log(`Scamalytics IP欺诈分查询:`);
         console.log(`节点名称: ${nodeName}`);
         console.log(`IP地址: ${scamInfo.ip}`);
         console.log(`IP城市: ${scamInfo.ip_city}`);
@@ -346,7 +347,7 @@ fetchWithTimeout(requestParams)
         `;
 
         $done({
-          title: "IP欺诈分查询",
+          title: "Scamalytics IP欺诈分查询",
           htmlMessage: resultHtml,
         });
       })
@@ -354,7 +355,7 @@ fetchWithTimeout(requestParams)
         console.error(error);
         const errorMessage = "<p style='text-align: center;'>🔴 查询超时</p>";
         $done({
-          title: "IP欺诈分查询",
+          title: "Scamalytics IP欺诈分查询",
           htmlMessage: errorMessage,
         });
       });
