@@ -325,7 +325,7 @@ fetchWithTimeout(requestParams)
 
         const resultHtml = `
         <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
-            <br>&nbsp;&nbsp;&nbsp;----------------------------------------
+            <br>&nbsp;&nbsp;&nbsp;---------------------------------------------
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP地址：</b>${scamInfo.ip}<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP城市：</b>${scamInfo.ip_city}<br>
@@ -339,7 +339,7 @@ fetchWithTimeout(requestParams)
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN编号：</b>${scamInfo.as_number}<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN机构：</b>${scamInfo["Organization Name"]}<br>
-            <br>&nbsp;&nbsp;&nbsp;----------------------------------------
+            <br>&nbsp;&nbsp;&nbsp;---------------------------------------------
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span>
         </p>
