@@ -363,7 +363,7 @@ fetchWithTimeout(requestParams)
     console.error(error);
     const errorMessage = "<p style='text-align: center;'>🔴 查询超时</p>";
     $done({
-      title: "IP欺诈分查询",
+      title: "Scamalytics IP欺诈分查询",
       htmlMessage: errorMessage,
     });
   });
