@@ -1,40 +1,32 @@
-const cookieName = '云闪付'; // 可以根据需要修改
-const authKey = 'ysf_Authorization';
-const userAgentKey = 'ysf_User-Agent';
+const authorizationKey = 'unipay_authorizationKey';
+const $tool = tool();
 
-const requestUrl = $request.url;
-const requestHeaders = $request.headers;
-
-if (requestUrl.includes('youhui.95516.com/newsign/api')) {
-  // 获取 Authorization 和 User-Agent 的逻辑
-  const authVal = requestHeaders['Authorization'];
-  const userAgentVal = requestHeaders['User-Agent'];
-
-  // 存储 Authorization
-  if (authVal) {
-    if (typeof $persistentStore !== 'undefined') {
-      $persistentStore.write(authKey, authVal);
-    } else if (typeof $prefs !== 'undefined') {
-      $prefs.setValueForKey(authVal, authKey);
+function extractAuthorization() {
+    let isGetCookie = typeof $request !== 'undefined' && $request.method != 'OPTIONS';
+    if (isGetCookie && $request.url.indexOf("https://youhui.95516.com/newsign/api/shop_items") > -1) {
+        var authorizationVal = $request.headers["Authorization"];
+        if (authorizationVal) {
+            // 提取 token 部分
+            var token = authorizationVal.split(' ')[1];
+            if (token) {
+                $tool.setdata(token, authorizationKey);  // 使用 setdata 存储值
+                console.log("🍎Authorization Token:" + token);
+                $tool.notify("云闪付签到!", "获得Authorization Token", token, { img: img });
+            }
+            $done({});
+        }
     }
-    $notification.post(cookieName, '获取Authorization: 成功', '');
-    console.log(`[${cookieName}] 获取Authorization: 成功, Authorization: ${authVal}`);
-  } else {
-    $notification.post(cookieName, '未找到Authorization头部', '');
-  }
-
-  // 存储 User-Agent
-  if (userAgentVal) {
-    if (typeof $persistentStore !== 'undefined') {
-      $persistentStore.write(userAgentKey, userAgentVal);
-    } else if (typeof $prefs !== 'undefined') {
-      $prefs.setValueForKey(userAgentVal, userAgentKey);
-    }
-    $notification.post(cookieName, '获取User-Agent: 成功', '');
-    console.log(`[${cookieName}] 获取User-Agent: 成功, User-Agent: ${userAgentVal}`);
-  } else {
-    $notification.post(cookieName, '未找到User-Agent头部', '');
-  }
 }
 
-$done({});
+try {
+    console.log("🍎云闪付脚本开始!");
+    var img = "https://is5-ssl.mzstatic.com/image/thumb/Purple114/v4/53/bc/b5/53bcb52a-6c33-67cc-0c70-faf4ffbdb71e/AppIcon-0-0-1x_U007emarketing-0-0-0-6-0-0-85-220.png/230x0w.png";
+
+    // 调用提取 Authorization 的函数
+    extractAuthorization();
+
+} catch (e) {
+    console.log("🍎error" + e);
+    $tool.notify("云闪付错误!", e, e, { img: img });
+    $done();
+}
