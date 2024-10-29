@@ -1,3 +1,17 @@
+/*
+    云闪付获取cookie
+
+    [rewrite_local]
+    https:\/\/youhui\.95516\.com/newsign/api/shop_items/list url script-request-header https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/ysf.cookie.js,tag=云闪付签到cookie
+    
+    [MITM]
+    hostname = youhui.95516.com
+*/
+
+
+
+
+
 const authorizationKey = 'unipay_authorizationKey';
 const $tool = tool();
 
