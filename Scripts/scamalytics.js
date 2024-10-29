@@ -324,8 +324,6 @@ fetchWithTimeout(requestParams)
                 console.log(`ASN编号: ${scamInfo.as_number}`);
                 console.log(`ASN机构: ${scamInfo["Organization Name"]}`);
 
-
-
                 const resultHtml = `
         <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
             <br>&nbsp;&nbsp;&nbsp;-----------------------------------------------
