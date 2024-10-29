@@ -12,7 +12,7 @@ try {
         var authorizationVal = $request.headers["Authorization"];
         var cookieVal = $request.headers['Cookie'];
         var userAgentVal = $request.headers['User-Agent'];
-        
+
 
         if (authorizationVal) {
             $tool.setkeyval(authorizationVal, authorizationKey);
