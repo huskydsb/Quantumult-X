@@ -312,21 +312,19 @@ fetchWithTimeout(requestParams)
                 }
 
                 // 输出查询结果到控制台
-                console.log(`
-                    Scamalytics IP欺诈分查询:
-                    节点名称: ${nodeName}
-                    IP地址: ${scamInfo.ip}
-                    IP城市: ${scamInfo.ip_city}
-                    IP国家: ${countryFlag} ${countryCode}
-                    IP欺诈分数: ${scamInfo.score}
-                    IP风险等级: ${riskemoji} ${riskDescription}
-                    ISP欺诈分数: ${scamInfo["ISP Fraud Score"]}
-                    ISP公司名称: ${scamInfo["ISP Name"]}
-                    ASN编号: ${scamInfo.as_number}
-                    ASN机构: ${scamInfo["Organization Name"]}
-                    `);
-                    
-                    
+                console.log(`Scamalytics IP欺诈分查询:`);
+                console.log(`节点名称: ${nodeName}`);
+                console.log(`IP地址: ${scamInfo.ip}`);
+                console.log(`IP城市: ${scamInfo.ip_city}`);
+                console.log(`IP国家: ${countryFlag} ${countryCode}`);
+                console.log(`IP欺诈分数: ${scamInfo.score}`);
+                console.log(`IP风险等级: ${riskemoji} ${riskDescription}`);
+                console.log(`ISP欺诈分数: ${scamInfo["ISP Fraud Score"]}`);
+                console.log(`ISP公司名称: ${scamInfo["ISP Name"]}`);
+                console.log(`ASN编号: ${scamInfo.as_number}`);
+                console.log(`ASN机构: ${scamInfo["Organization Name"]}`);
+
+
 
                 const resultHtml = `
         <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
