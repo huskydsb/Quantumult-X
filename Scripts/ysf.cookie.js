@@ -1,36 +1,18 @@
-const cookieKey = 'unipay_cookieKey';
-const authorizationKey = 'unipay_authorizationKey';
-const userAgentKey = 'unipay_userAgentKey';
-const $tool = tool();
+const request = $request;
+const authHeader = request.headers['Authorization'];
 
-try {
-    console.log("🍎 云闪付签到脚本获取cookie!");
+if (authHeader) {
+    const tokenValue = authHeader.replace('Bearer ', '');
 
-    let isGetCookie = typeof $request !== 'undefined' && $request.method !== 'OPTIONS';
-
-    if (isGetCookie && $request.url.indexOf("https://youhui.95516.com/newsign/api/daily_sign_in") > -1) {
-        var authorizationVal = $request.headers["Authorization"];
-        var cookieVal = $request.headers['Cookie'];
-        var userAgentVal = $request.headers['User-Agent'];
-
-
-        if (authorizationVal) {
-            $tool.setkeyval(authorizationVal, authorizationKey);
-            $tool.setkeyval(cookieVal, cookieKey);
-            $tool.setkeyval(userAgentVal, userAgentKey);
-            console.log("🍎 Authorization:", authorizationVal);
-            console.log("🍎 Cookie:", cookieVal);
-            console.log("🍎 User-Agent:", userAgentVal);
-            $done({});
-        }
+    if (tokenValue) {
+        // 存储 token 到 QX 中
+        $.setdata(tokenValue, 'ysfqd_data'); // 使用 ysfqd_data 作为键名
+        $.msg($.name, "", "获取签到Cookie成功🎉");
     } else {
-        console.log("🍎 云闪付签到脚本获取cookie失败");
-        $done({});
+        $.msg($.name, "", "错误获取签到Cookie失败");
     }
-
-} catch (e) {
-    console.log("🍎 错误:", e);
-    $done();
+} else {
+    $.msg($.name, "", "未找到Authorization头部");
 }
 
-
+$done({});
