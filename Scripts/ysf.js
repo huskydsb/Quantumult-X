@@ -15,10 +15,10 @@ hostname = youhui.95516.com
 
 
 
-const cookieKey = 'unipay_cookieKey';
-const authorizationKey = 'unipay_authorizationKey';
-const userAgentKey = 'unipay_userAgentKey';
-const $tool = tool();
+const Cookie = 'unipay_Cookie';
+const Authorization = 'unipay_Authorization';
+const User-Agent = 'unipay_User-Agent';
+
 try {
     console.log("🍎云闪付签到脚本开始!");
     var img = "https://is5-ssl.mzstatic.com/image/thumb/Purple114/v4/53/bc/b5/53bcb52a-6c33-67cc-0c70-faf4ffbdb71e/AppIcon-0-0-1x_U007emarketing-0-0-0-6-0-0-85-220.png/230x0w.png";
@@ -29,9 +29,9 @@ try {
         var cookieVal = $request.headers['Cookie'];
         var userAgentVal = $request.headers['User-Agent'];
         if (!!authorizationVal) {            
-            $tool.setkeyval(authorizationVal, authorizationKey);
-            $tool.setkeyval(cookieVal, cookieKey);
-            $tool.setkeyval(userAgentVal, userAgentKey);
+            $tool.setkeyval(authorizationVal, Authorization);
+            $tool.setkeyval(cookieVal, Cookie);
+            $tool.setkeyval(userAgentVal, User-Agent);
             console.log("🍎Authorization:" + authorizationVal);
             $tool.notify("云闪付签到!", "获得Authorization", authorizationVal, { img: img });
             $done({});
@@ -43,8 +43,8 @@ try {
             'Content-Type': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br',            
             'Origin': 'https://youhui.95516.com',
-            'User-Agent': $tool.getkeyval(userAgentKey),
-            'Authorization': $tool.getkeyval(authorizationKey),
+            'User-Agent': $tool.getkeyval(User-Agent),
+            'Authorization': $tool.getkeyval(Authorization),
             'Referer': 'https://youhui.95516.com/newsign/public/app/index.html',
             'Host': 'youhui.95516.com',
             'Accept-Language': 'zh-cn',
