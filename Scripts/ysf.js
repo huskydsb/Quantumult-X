@@ -4,8 +4,7 @@
 
 31 8 * * * https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/ysf.js, tag=云闪付签到
 
-^https:\/\/youhui\.95516\.com/newsign/api/ url script-response-body  https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/ysf.js
-
+^https:\/\/youhui\.95516\.com/newsign/api/ url script-response-body  https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/ysf.cookie.js
 [MITM]
 
 hostname = youhui.95516.com
