@@ -27,6 +27,6 @@ try {
 
 } catch (e) {
     console.log("🍎error" + e);
-    $tool.notify("云闪付错误!", e, e, { img: img });
+    $tool.notify("云闪付错误!", e.message, e.message, { img: img });
     $done();
 }
