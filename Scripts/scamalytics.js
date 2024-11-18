@@ -351,8 +351,8 @@ fetchWithTimeout(requestParams)
                 IP地址: ${ip}
                 IP城市: ${city}
                 IP国家: ${countryCode}
-                ISP公司名称: ${isp}
-                组织名称: ${org}
+                ISP公司: ${isp}
+                ISP组织: ${org}
                 ASN信息: ${asInfo}
                 IP欺诈分数: ${score}
                 IP风险等级: ${riskemoji} ${riskDescription}
@@ -373,8 +373,8 @@ fetchWithTimeout(requestParams)
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP地址：</b>${ip}<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP城市：</b>${city}<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP国家：</b>${countryCode}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP公司名称：</b>${isp}<br>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>组织名称：</b>${org}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP公司：</b>${isp}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP组织：</b>${org}<br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN信息：</b>${asInfo}<br>
             <br>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP欺诈分数：</b>&nbsp;&nbsp;${score}<br>
