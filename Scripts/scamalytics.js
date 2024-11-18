@@ -107,20 +107,20 @@ fetchWithTimeout(requestParams)
                 Scamalytics IP欺诈分查询:
                 节点名称: ${nodeName}
                 IP地址: ${ip}
+                IP欺诈分数: ${score}
+                IP风险等级: ${riskemoji} ${riskDescription}
                 IP城市: ${city}
                 IP国家: ${countryCode}
                 ISP公司: ${isp}
                 ISP组织: ${org}
                 ASN信息: ${asInfo}
-                IP欺诈分数: ${score}
-                IP风险等级: ${riskemoji} ${riskDescription}
             `;
 
                 const formattedMessage = logMessage
                     .split('\n')
                     .map(line => line.trimStart())
                     .join('\n');
-                
+
                 console.log(formattedMessage);
 
                 // 构建结果页面
