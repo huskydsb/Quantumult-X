@@ -4,7 +4,7 @@ const message = {
 
 $configuration.sendMessage(message).then(resolve => {
     if (resolve.error) {
-        console.log("DNS 缓存清除失败:", resolve.error);
+        console.log("DNS 缓存清除失败", resolve.error);
     } else {
         console.log("DNS 缓存清除成功", JSON.stringify(resolve.ret));
     }
