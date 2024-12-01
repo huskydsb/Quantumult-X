@@ -1,39 +1,31 @@
 /********************************
 [Script]
 
-^https:\/\/kelee\.one\/ url script-request-header https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/loon.js
-^https:\/\/kelee\.one\/.*\.(plugin|js)$ url script-response-header https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/loon.js
+^https:\/\/kelee\.one\/ url script-request-header https://path/to/your/script.js
+^https:\/\/kelee\.one\/.*\.(plugin|js)$ url script-response-body https://path/to/your/script.js
 
 [MITM]
 hostname = kelee.one
 ********************************/
 
 // 函数：尝试将乱码转换为可读文本
-function decodeUTF8(text) {
+function decodeText(text) {
     try {
-        // 将文本转换为二进制数据
-        const bytes = new Uint8Array(text.split('').map(char => char.charCodeAt(0)));
-        // 使用 TextDecoder 将二进制数据解码为 UTF-8 文本
-        return new TextDecoder('utf-8').decode(bytes);
+        // 假设乱码是由于错误的编码导致的，尝试使用不同的编码解码
+        const decoder = new TextDecoder('utf-8', { fatal: false });
+        const bytes = new Uint8Array([...text].map(char => char.charCodeAt(0)));
+        return decoder.decode(bytes);
     } catch (e) {
         console.log("解码失败:", e);
         return text; // 如果解码失败，返回原始文本
     }
 }
 
-// 匹配以 kelee.one 开头的 URL
-const urlPattern = /^https:\/\/kelee\.one\//;
-// 匹配 .plugin 和 .js 文件
-const filePattern = /\.(plugin|js)$/;
-
-// 判断是否为请求头修改
-if (urlPattern.test($request.url)) {
-    console.log("匹配到 kelee.one 的请求 URL:", $request.url);
-
-    // 构建修改后的请求头对象
-    let modifiedHeaders = {
-        ...$request.headers,
-        'User-Agent': 'Loon/762 CFNetwork/1568.200.51 Darwin/24.1.0', // 自定义 User-Agent
+// 函数：处理请求头
+function handleRequestHeaders(request) {
+    const modifiedHeaders = {
+        ...request.headers,
+        'User-Agent': 'Loon/762 CFNetwork/1568.200.51 Darwin/24.1.0',
         'Accept-Encoding': 'gzip, deflate, br',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
         'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
@@ -44,23 +36,18 @@ if (urlPattern.test($request.url)) {
         'Connection': 'keep-alive',
         'Host': 'kelee.one'
     };
+    return { headers: modifiedHeaders };
+}
 
-    console.log("修改后的请求头:", modifiedHeaders);
-
-    // 返回修改后的请求头
-    $done({ headers: modifiedHeaders });
-} 
-// 判断是否为 .plugin 或 .js 文件的响应头修改
-else if ($response && filePattern.test($request.url)) {
-    console.log("匹配到 .plugin 或 .js 文件的响应 URL:", $request.url);
-
-    let modifiedResponseHeaders = {
+// 函数：处理响应头和响应体
+function handleResponse(response) {
+    const modifiedResponseHeaders = {
         'HTTP/1.1': '200 OK',
-        'Content-Type': 'text/plain; charset=utf-8', // 强制设置为 UTF-8 编码显示
-        'Content-Disposition': 'inline', // 防止浏览器自动下载
-        'Cache-Control': 'no-cache', // 防止缓存
-        'Content-Encoding': 'identity', // 防止浏览器自动解压缩
-        'Accept-Encoding': 'identity', // 确保内容不被压缩
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Content-Disposition': 'inline',
+        'Cache-Control': 'no-cache',
+        'Content-Encoding': 'identity',
+        'Accept-Encoding': 'identity',
         'Sec-Fetch-Mode': 'navigate',
         'Connection': 'keep-alive',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -72,16 +59,32 @@ else if ($response && filePattern.test($request.url)) {
         'User-Agent': 'Loon/762 CFNetwork/1568.200.51 Darwin/24.1.0'
     };
 
-    console.log("修改后的响应头:", modifiedResponseHeaders);
+    let body = response.body;
 
-    // 假设响应体中包含需要解码的文本，进行解码
-    let body = $response.body;
-    body = decodeUTF8(body);
+    // 尝试解码乱码
+    body = decodeText(body);
 
-    // 返回修改后的响应头和解码后的响应体
-    $done({ headers: modifiedResponseHeaders, body: body });
-} else {
-    console.log("不符合修改条件的请求 URL:", $request.url);
-    // 若不符合上述条件，直接返回
-    $done({});
+    // 如果有特定的乱码字符，可以进行替换
+    body = body.replace(/特定乱码/g, "替换后的文本");
+
+    return { headers: modifiedResponseHeaders, body: body };
+}
+
+// 主逻辑
+if ($response) {
+    console.log("处理响应 URL:", $request.url);
+
+    if (filePattern.test($request.url)) {
+        $done(handleResponse($response));
+    } else {
+        console.log("不符合修改条件的响应 URL:", $request.url);
+        $done({});
+    }
+} else if ($request) {
+    if (urlPattern.test($request.url)) {
+        $done(handleRequestHeaders($request));
+    } else {
+        console.log("不符合修改条件的请求 URL:", $request.url);
+        $done({});
+    }
 }
