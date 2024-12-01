@@ -8,6 +8,10 @@
 hostname = kelee.one
 ********************************/
 
+// 定义正则表达式模式
+const urlPattern = /^https:\/\/kelee\.one\//;
+const filePattern = /^https:\/\/kelee\.one\/.*\.(plugin|js)$/;
+
 // 函数：尝试将乱码转换为可读文本
 function decodeText(text) {
     try {
