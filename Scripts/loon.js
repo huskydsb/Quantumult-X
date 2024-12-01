@@ -54,4 +54,3 @@ if (urlPattern.test($request.url)) {
 } else {
     $done({});
 }
-}
