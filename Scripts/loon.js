@@ -8,6 +8,19 @@
 hostname = kelee.one
 ********************************/
 
+// 函数：尝试将乱码转换为可读文本
+function decodeUTF8(text) {
+    try {
+        // 将文本转换为二进制数据
+        const bytes = new Uint8Array(text.split('').map(char => char.charCodeAt(0)));
+        // 使用 TextDecoder 将二进制数据解码为 UTF-8 文本
+        return new TextDecoder('utf-8').decode(bytes);
+    } catch (e) {
+        console.log("解码失败:", e);
+        return text; // 如果解码失败，返回原始文本
+    }
+}
+
 // 匹配以 kelee.one 开头的 URL
 const urlPattern = /^https:\/\/kelee\.one\//;
 // 匹配 .plugin 和 .js 文件
@@ -61,8 +74,12 @@ else if ($response && filePattern.test($request.url)) {
 
     console.log("修改后的响应头:", modifiedResponseHeaders);
 
-    // 返回修改后的响应头
-    $done({ headers: modifiedResponseHeaders });
+    // 假设响应体中包含需要解码的文本，进行解码
+    let body = $response.body;
+    body = decodeUTF8(body);
+
+    // 返回修改后的响应头和解码后的响应体
+    $done({ headers: modifiedResponseHeaders, body: body });
 } else {
     console.log("不符合修改条件的请求 URL:", $request.url);
     // 若不符合上述条件，直接返回
