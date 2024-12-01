@@ -7,18 +7,17 @@
 [MITM]
 hostname = kelee.one
 ********************************/
-
 // 匹配以 kelee.one 开头的 URL
 const urlPattern = /^https:\/\/kelee\.one\//;
 // 匹配 .plugin 和 .js 文件
 const filePattern = /\.(plugin|js)$/;
 
-// 工具函数：修复乱码编码（假设返回的是 GBK 编码但被当作 UTF-8 解码的内容）
+// 工具函数：修复乱码编码
 function fixEncoding(text) {
     try {
-        // 使用 TextEncoder 解码错误的字符编码
-        const bytes = new TextEncoder().encode(text);
+        // 使用 TextDecoder 解码错误的字符编码
         const decoder = new TextDecoder('utf-8', { fatal: false });
+        const bytes = new TextEncoder().encode(text);
         return decoder.decode(bytes);
     } catch (e) {
         console.error("修复编码失败:", e);
@@ -50,7 +49,8 @@ if (urlPattern.test($request.url)) {
     // 修改响应头
     let modifiedResponseHeaders = {
         ...$response.headers,
-        'Content-Type': 'text/plain; charset=utf-8', // 强制 UTF-8 编码显示
+        'Content-Type': 'text/html; charset=utf-8', // 设置为 HTML
+        'Content-Disposition': 'inline', // 防止下载
         'Content-Encoding': 'identity', // 防止解压缩干扰
     };
 
