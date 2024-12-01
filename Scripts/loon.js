@@ -9,6 +9,8 @@ hostname = kelee.one
 ********************************/
 
 
+
+
 // 匹配以 kelee.one 开头的 URL
 const urlPattern = /^https:\/\/kelee\.one\//;
 // 匹配 .plugin 和 .js 文件
@@ -34,7 +36,8 @@ if ($response && filePattern.test($request.url)) {
         // 无需处理响应体，直接返回
         $done({ headers: modifiedResponseHeaders, body });
     } else {
-        console.warn("响应体不是字符串类型，跳过处理");
+        // 替换 console.warn 为 console.log
+        console.log("响应体不是字符串类型，跳过处理");
         $done({});
     }
 } else if ($request && urlPattern.test($request.url)) {
