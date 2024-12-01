@@ -12,55 +12,63 @@ hostname = kelee.one
 ********************************/
 
 
-// 工具函数：修复乱码编码
-function fixEncoding(text, encoding = 'gbk') {
+// 工具函数：解码 GBK 到 UTF-8
+function decodeGBK(input) {
     try {
-        const decoder = new TextDecoder(encoding, { fatal: false });
-        const encoder = new TextEncoder();
-
-        // 将文本转为字节数组再解码
-        const bytes = encoder.encode(text);
-        return decoder.decode(bytes);
+        const iconv = require("iconv-lite");
+        return iconv.decode(Buffer.from(input, "binary"), "gbk");
     } catch (e) {
-        console.log("编码修复失败:", e);
-        return text;
+        console.error("解码 GBK 出错:", e);
+        return input;
     }
 }
 
-// 主逻辑
+// 修改请求头逻辑
+if (typeof $request !== "undefined") {
+    console.log("匹配的请求 URL:", $request.url);
+
+    // 使用你提供的请求头
+    let modifiedHeaders = {
+        ...$request.headers,
+        'User-Agent': 'Loon/762 CFNetwork/1568.200.51 Darwin/24.1.0', // 你的 UA
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+        'Connection': 'keep-alive',
+        'Host': 'kelee.one',
+    };
+
+    console.log("修改后的请求头:", JSON.stringify(modifiedHeaders, null, 2));
+    $done({ headers: modifiedHeaders });
+}
+
+// 修改响应体逻辑
 if (typeof $response !== "undefined") {
-    // 匹配目标请求的 URL
-    const urlPattern = /^https:\/\/kelee\.one\/.*\.(plugin|js)$/;
+    console.log("匹配的响应 URL:", $request.url);
 
-    if (urlPattern.test($request.url)) {
-        console.log("匹配的响应 URL:", $request.url);
+    let modifiedHeaders = {
+        ...$response.headers,
+        'Content-Type': 'text/plain; charset=utf-8', // 强制 UTF-8 显示
+        'Content-Encoding': 'identity', // 防止解压干扰
+    };
 
-        // 修改响应头
-        let modifiedResponseHeaders = {
-            ...$response.headers,
-            'Content-Type': 'text/plain; charset=utf-8', // 强制设置为 UTF-8
-            'Content-Disposition': 'inline', // 防止下载，强制在线预览
-        };
+    console.log("修改后的响应头:", JSON.stringify(modifiedHeaders, null, 2));
 
-        let body = $response.body;
+    let body = $response.body;
 
-        if (typeof body === 'string') {
-            console.log("原始响应体（前100字符）:", body.slice(0, 100));
+    if (typeof body === 'string') {
+        console.log("原始响应体（前100字符）:", body.slice(0, 100));
 
-            // 修复乱码内容
-            const fixedBody = fixEncoding(body, 'gbk'); // 强制 GBK 解码
-            console.log("修复后的响应体（前100字符）:", fixedBody.slice(0, 100));
+        // 尝试解码 GBK
+        const decodedBody = decodeGBK(body);
 
-            // 返回修复后的内容
-            $done({ headers: modifiedResponseHeaders, body: fixedBody });
-        } else {
-            console.log("响应体不是字符串类型，可能是二进制数据，跳过处理");
-            $done({ headers: modifiedResponseHeaders });
-        }
+        // 打印修复后的响应体
+        console.log("修复后的响应体（前100字符）:", decodedBody.slice(0, 100));
+
+        // 返回修复后的内容
+        $done({ headers: modifiedHeaders, body: decodedBody });
     } else {
-        console.log("未匹配的响应 URL:", $request.url);
-        $done({});
+        console.warn("响应体不是字符串类型，跳过处理");
+        $done({ headers: modifiedHeaders, body: $response.body });
     }
-} else {
-    $done({});
 }
