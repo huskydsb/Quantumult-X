@@ -8,9 +8,6 @@
 hostname = kelee.one
 ********************************/
 
-
-
-
 // 匹配以 kelee.one 开头的 URL
 const urlPattern = /^https:\/\/kelee\.one\//;
 // 匹配 .plugin 和 .js 文件
@@ -20,10 +17,11 @@ const filePattern = /\.(plugin|js)$/;
 if ($response && filePattern.test($request.url)) {
     console.log("匹配的响应 URL:", $request.url);
 
-    // 强制修改响应头为 GBK
+    // 强制修改响应头
     let modifiedResponseHeaders = {
         ...$response.headers,
-        'Content-Type': 'text/html; charset=GBK', // 强制设置为 GBK
+        'Content-Type': 'text/plain; charset=UTF-8', // 确保为普通文本
+        'Content-Disposition': 'inline', // 指定为内联显示而非附件下载
         'Content-Encoding': 'identity', // 防止解压缩干扰
     };
 
@@ -33,10 +31,9 @@ if ($response && filePattern.test($request.url)) {
     if (typeof body === 'string') {
         console.log("原始响应体（前100字符）:", body.slice(0, 100));
 
-        // 无需处理响应体，直接返回
+        // 返回修改后的内容
         $done({ headers: modifiedResponseHeaders, body });
     } else {
-        // 替换 console.warn 为 console.log
         console.log("响应体不是字符串类型，跳过处理");
         $done({});
     }
