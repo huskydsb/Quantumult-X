@@ -7,50 +7,48 @@
 [MITM]
 hostname = kelee.one
 ********************************/
-// 匹配 kelee.one 的 URL
+
+
+// 匹配以 kelee.one 开头的 URL
 const urlPattern = /^https:\/\/kelee\.one\//;
+// 匹配 .plugin 和 .js 文件
 const filePattern = /\.(plugin|js)$/;
 
-// 工具函数：将 GBK 内容转换为 UTF-8
-function gbkToUtf8(buffer) {
-    const decoder = new TextDecoder('gbk');
-    const encoder = new TextEncoder();
-    try {
-        const decoded = decoder.decode(buffer);
-        return encoder.encode(decoded).buffer;
-    } catch (e) {
-        return buffer; // 如果解码失败，返回原始内容
-    }
-}
+// 主逻辑处理
+if ($response && filePattern.test($request.url)) {
+    console.log("匹配的响应 URL:", $request.url);
 
-// 主逻辑
-if (urlPattern.test($request.url)) {
-    // 修改请求头
-    $done({
-        headers: {
-            ...$request.headers,
-            'User-Agent': 'Loon/762 CFNetwork/1568.200.51 Darwin/24.1.0',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-            'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
-            'Connection': 'keep-alive',
-            'Host': 'kelee.one',
-        },
-    });
-} else if ($response && filePattern.test($request.url)) {
+    // 强制修改响应头为 GBK
     let modifiedResponseHeaders = {
         ...$response.headers,
-        'Content-Type': 'text/html; charset=utf-8',
-        'Content-Encoding': 'identity',
+        'Content-Type': 'text/html; charset=GBK', // 强制设置为 GBK
+        'Content-Encoding': 'identity', // 防止解压缩干扰
     };
 
-    let body = $response.body;
-    if (typeof body !== 'string') {
-        // 修复二进制响应体的乱码
-        body = gbkToUtf8(body);
-    }
+    console.log("修改后的响应头:", JSON.stringify(modifiedResponseHeaders, null, 2));
 
-    $done({ headers: modifiedResponseHeaders, body });
+    let body = $response.body;
+    if (typeof body === 'string') {
+        console.log("原始响应体（前100字符）:", body.slice(0, 100));
+
+        // 无需处理响应体，直接返回
+        $done({ headers: modifiedResponseHeaders, body });
+    } else {
+        console.warn("响应体不是字符串类型，跳过处理");
+        $done({});
+    }
+} else if ($request && urlPattern.test($request.url)) {
+    console.log("匹配的请求 URL:", $request.url);
+
+    // 修改请求头
+    let modifiedHeaders = {
+        ...$request.headers,
+        'User-Agent': 'Loon/762 CFNetwork/1568.200.51 Darwin/24.1.0', // 自定义 User-Agent
+    };
+
+    console.log("修改后的请求头:", JSON.stringify(modifiedHeaders, null, 2));
+    $done({ headers: modifiedHeaders });
 } else {
+    console.log("不符合修改条件的请求或响应 URL:", $request.url);
     $done({});
 }
