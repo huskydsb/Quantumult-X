@@ -30,8 +30,7 @@ if (typeof $response !== "undefined") {
     // 修改响应头逻辑
     let modifiedHeaders = {
         ...$response.headers,
-        'Content-Type': 'text/plain; charset=utf-8', // 强制 UTF-8 显示
-        'Content-Encoding': 'identity', // 防止解压干扰
+        'Content-Encoding': 'identity',
     };
 
     let body = $response.body;
