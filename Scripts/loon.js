@@ -1,8 +1,8 @@
-/********************************
+/******************************
 [Script]
 
-^https:\/\/kelee\.one\/ url script-request-header https://path/to/your/script.js
-^https:\/\/kelee\.one\/.*\.(plugin|js)$ url script-response-body https://path/to/your/script.js
+^https:\/\/kelee\.one\/ url script-request-header https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/loon.js
+^https:\/\/kelee\.one\/.*\.(plugin|js)$ url script-response-header https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/loon.js
 
 [MITM]
 hostname = kelee.one
