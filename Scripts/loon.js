@@ -8,88 +8,63 @@
 hostname = kelee.one
 ********************************/
 
-// 配置部分
-const config = {
-    urlPattern: /^https:\/\/kelee\.one\//i, // 匹配 kelee.one 主站 URL
-    filePattern: /^https:\/\/kelee\.one\/.*\.(plugin|js)$/i, // 匹配 kelee.one 的特定文件
-    defaultHeaders: {
-        'User-Agent': 'Loon/762 CFNetwork/1568.200.51 Darwin/24.1.0',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
-        'Connection': 'keep-alive',
-        'Host': 'kelee.one'
-    },
-    modifiedResponseHeaders: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Content-Encoding': 'identity'
-    }
-};
+// 匹配以 kelee.one 开头的 URL
+const urlPattern = /^https:\/\/kelee\.one\//;
+// 匹配 .plugin 和 .js 文件
+const filePattern = /\.(plugin|js)$/;
 
-// 工具函数：将乱码修正为正确的文本
+// 工具函数：解码 UTF-8 乱码内容
 function decodeText(text) {
     try {
-        // 将字符串转为字节流
+        // 将字符串转换为字节流
         const bytes = new Uint8Array([...text].map(char => char.charCodeAt(0)));
 
-        // 尝试使用 UTF-8 解码
+        // 使用 UTF-8 解码
         const decoder = new TextDecoder('utf-8', { fatal: false });
         return decoder.decode(bytes);
     } catch (e) {
         console.error("解码失败:", e);
-        return text; // 解码失败时返回原始文本
+        return text; // 解码失败时返回原始内容
     }
 }
 
-// 函数：修复乱码响应体
-function fixResponseBody(body) {
-    if (typeof body !== 'string') {
-        console.warn("响应体不是字符串类型，尝试强制转换");
-        body = String(body); // 将非字符串数据强制转换为字符串
-    }
-
-    // 自动解码 UTF-8 乱码
-    const decodedBody = decodeText(body);
-
-    // 返回修复后的内容
-    return decodedBody;
-}
-
-// 函数：处理请求头
-function handleRequestHeaders(request) {
-    console.log("正在修改请求头:", { url: request.url });
-    return { headers: { ...request.headers, ...config.defaultHeaders } };
-}
-
-// 函数：处理响应头和响应体
-function handleResponse(response) {
-    console.log("正在修改响应内容:", { originalHeaders: response.headers });
-
-    const modifiedBody = fixResponseBody(response.body);
-
-    return {
-        headers: { ...response.headers, ...config.modifiedResponseHeaders },
-        body: modifiedBody
+// 判断是否为请求头修改
+if (urlPattern.test($request.url)) {
+    // 构建修改后的请求头对象
+    let modifiedHeaders = {
+        ...$request.headers,
+        'User-Agent': 'Loon/762 CFNetwork/1568.200.51 Darwin/24.1.0', // 自定义 User-Agent
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-Dest': 'document',
+        'Priority': 'u=0, i',
+        'Connection': 'keep-alive',
+        'Host': 'kelee.one'
     };
+
+    // 返回修改后的请求头
+    $done({ headers: modifiedHeaders });
 }
+// 判断是否为 .plugin 或 .js 文件的响应头修改
+else if ($response && filePattern.test($request.url)) {
+    let modifiedResponseHeaders = {
+        ...$response.headers,
+        'Content-Type': 'text/plain; charset=utf-8', // 强制设置为 UTF-8 编码显示
+        'Content-Encoding': 'identity' // 防止浏览器自动解压缩
+    };
 
-// 主逻辑
-if (typeof $response !== 'undefined') {
-    console.log("检测到响应，URL:", $request.url);
-
-    if (config.filePattern.test($request.url)) {
-        $done(handleResponse($response));
-    } else {
-        console.log("不符合修改条件的响应 URL:", $request.url);
-        $done(); // 不做处理
+    // 处理响应体，解码可能存在的乱码
+    let body = $response.body;
+    if (typeof body === 'string') {
+        body = decodeText(body); // 修复乱码
     }
-} else if (typeof $request !== 'undefined') {
-    console.log("检测到请求，URL:", $request.url);
 
-    if (config.urlPattern.test($request.url)) {
-        $done(handleRequestHeaders($request));
-    } else {
-        console.log("不符合修改条件的请求 URL:", $request.url);
-        $done(); // 不做处理
-    }
+    // 返回修改后的响应头和解码后的响应体
+    $done({ headers: modifiedResponseHeaders, body });
+} else {
+    // 若不符合上述条件，直接返回
+    $done({});
 }
