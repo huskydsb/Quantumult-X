@@ -5,19 +5,6 @@
 hostname = api.m.jd.com
 */
 
-/*
-[rewrite_local]
-# 京东比价脚本
-^https?:\/\/your-api-endpoint\.com\/path1|path2|path3 url script-response-body jd_price.js
-
-[mitm]
-hostname = your-api-endpoint.com
-*/
-
-/**
- * 京东比价脚本
- */
-
 const path1 = "serverConfig";
 const path2 = "wareBusiness";
 const path3 = "basicConfig";
