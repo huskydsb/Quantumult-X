@@ -5,15 +5,12 @@
 hostname = api.m.jd.com
 */
 
-
-
 const path1 = "serverConfig";
 const path2 = "wareBusiness";
 const path3 = "basicConfig";
 const consoleLog = false; // 控制日志开关
 const url = $request.url;
 const body = $response.body;
-const $ = new Env("京东比价");
 
 // 处理 serverConfig 接口
 if (url.includes(path1)) {
@@ -39,7 +36,7 @@ if (url.includes(path3)) {
 if (url.includes(path2)) {
     let obj = JSON.parse(body);
     if (obj?.code > 0 && obj?.wait > 0) {
-        $.msg("可能被风控，请勿频繁操作", obj?.tips);
+        $notify("灰灰提示", "可能被风控，请勿频繁操作", obj?.tips);
         $done({ body });
     }
 
@@ -106,7 +103,7 @@ function createAdWord() {
 function getLowerMsg(single) {
     const lower = single.lowerPriceyh;
     const timestamp = parseInt(single.lowerDateyh.match(/\d+/), 10);
-    const lowerDate = $.time("yyyy-MM-dd", timestamp);
+    const lowerDate = formatDate("yyyy-MM-dd", timestamp);
     return `历史最低:¥${lower} (${lowerDate})`;
 }
 
@@ -139,7 +136,7 @@ function getHistorySummary(single) {
         results.push({
             Name: `${days}天最低`,
             Price: lowest.price,
-            Date: $.time("yyyy-MM-dd", lowest.date),
+            Date: formatDate("yyyy-MM-dd", lowest.date),
             Difference: calculateDifference(currentPrice, lowest.price)
         });
     }
@@ -165,14 +162,23 @@ function requestHistoryPrice(shareUrl) {
             body: `methodName=getHistoryTrend&p_url=${encodeURIComponent(shareUrl)}`
         };
 
-        $.post(options, (error, response, data) => {
-            if (error) {
-                consoleLog && console.log("请求错误:", error);
-                reject(error);
-            } else {
-                consoleLog && console.log("请求结果:", data);
-                resolve(JSON.parse(data));
-            }
+        $task.fetch({ method: "POST", ...options }).then(response => {
+            consoleLog && console.log("请求结果:", response.body);
+            resolve(JSON.parse(response.body));
+        }).catch(error => {
+            consoleLog && console.log("请求错误:", error);
+            reject(error);
         });
     });
+}
+
+// 日期格式化函数
+function formatDate(fmt, timestamp) {
+    const date = new Date(timestamp);
+    const opt = {
+        "yyyy": date.getFullYear(),
+        "MM": (`0${date.getMonth() + 1}`).slice(-2),
+        "dd": (`0${date.getDate()}`).slice(-2)
+    };
+    return fmt.replace(/yyyy|MM|dd/g, key => opt[key]);
 }
