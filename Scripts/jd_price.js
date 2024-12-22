@@ -1,3 +1,12 @@
+/*
+[rewrite_local]
+^https?:\/\/api\.m\.jd\.com/client\.action\?functionId=(wareBusiness|serverConfig|basicConfig) url script-response-body https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/jd_price.js
+[mitm]
+hostname = api.m.jd.com
+*/
+
+
+
 const path1 = "serverConfig";
 const path2 = "wareBusiness";
 const path3 = "basicConfig";
@@ -30,7 +39,7 @@ if (url.includes(path3)) {
 if (url.includes(path2)) {
     let obj = JSON.parse(body);
     if (obj?.code > 0 && obj?.wait > 0) {
-        $.msg("灰灰提示", "可能被风控，请勿频繁操作", obj?.tips);
+        $.msg("可能被风控，请勿频繁操作", obj?.tips);
         $done({ body });
     }
 
