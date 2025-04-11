@@ -9,6 +9,7 @@ function formatDateTime(date) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
+
 // 检查请求方法
 if ($request.method !== 'OPTIONS') {
   console.log(`[${formatDateTime(new Date())}] 🚀 脚本开始执行，URL: ${$request.url}, Method: ${$request.method}`);
