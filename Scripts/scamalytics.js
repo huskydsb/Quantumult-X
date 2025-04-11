@@ -46,35 +46,25 @@ fetchWithTimeout(requestParams)
             },
         };
 
-        // 通过页面抓取获取欺诈分数和风险等级
-        fetchWithTimeout(scamRequestParams)
-            .then((response) => {
-                const htmlContent = response.body;
+fetchWithTimeout(scamRequestParams)
+    .then((response) => {
+        const htmlContent = response.body;
 
-               
-                // 提取 <pre> 标签中的内容
-                let preRegex = /<pre[^>]*>([\s\S]*?)<\/pre>/i;
-                let preMatch = htmlContent.match(preRegex);
-                let preContent = preMatch ? preMatch[1].trim() : null;
+        // 提取 <pre> 标签中的内容
+        let preRegex = /<pre[^>]*>([\s\S]*?)<\/pre>/i;
+        let preMatch = htmlContent.match(preRegex);
+        let preContent = preMatch ? preMatch[1].trim() : null;
 
-       
-                let score = "N/A";
-                let riskDescription = "未知风险";
-                let riskemoji = "⚪";
+        let score = "N/A";
+        let riskDescription = "未知风险";
+        let riskemoji = "⚪";
 
-                if (preContent) {
-                    // 使用正则提取 JSON 字符串
-                    const jsonRegex = /({[\s\S]*?})/;
-                    const jsonMatch = preContent.match(jsonRegex);
-
-                    if (jsonMatch) {
-                        const jsonData = jsonMatch[1];
-
-                        // 尝试解析 JSON 数据
-                        try {
-                            const parsedData = JSON.parse(jsonData);
-                            score = parsedData.score || "N/A";
-                            const risk = parsedData.risk || "unknown";
+        if (preContent) {
+            try {
+                // 直接解析 JSON 内容
+                const parsedData = JSON.parse(preContent);
+                score = parsedData.score || "N/A";
+                const risk = parsedData.risk || "unknown";
 
                             // 根据风险等级设置描述和表情符号
                             switch (risk) {
