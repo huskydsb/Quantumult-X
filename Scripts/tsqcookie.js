@@ -1,4 +1,4 @@
-// 淘气兔 Cookie 获取脚本（Quantumult X 适配）
+// Quantumult X 获取 Authorization 脚本（适配 getSignList 接口）
 
 function formatDateTime(date) {
   const year = date.getFullYear();
@@ -10,29 +10,23 @@ function formatDateTime(date) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-if ($request.method !== 'OPTIONS') {
-  console.log(`[${formatDateTime(new Date())}] 🚀 脚本开始执行，URL: ${$request.url}, Method: ${$request.method}`);
+if ($request && $request.headers) {
+  const headers = $request.headers;
+  const authorization = headers['Authorization'] || headers['authorization'];
 
-  setTimeout(() => {
-    const headers = $request.headers;
-    const authorization = headers['authorization'];
+  console.log(`[${formatDateTime(new Date())}] 🛰 请求地址: ${$request.url}`);
+  console.log(`[${formatDateTime(new Date())}] 📝 请求头如下:\n${JSON.stringify(headers, null, 2)}`);
 
-    console.log(`[${formatDateTime(new Date())}] 📝 尝试获取 Authorization 字段`);
-
-    if (authorization) {
-      const writeResult = $prefs.setValueForKey(authorization, 'taoqitu_authorization');
-      console.log(`[${formatDateTime(new Date())}] ✅ 获取成功：Authorization 字段已存储`);
-
-      $notify('淘气兔签到获取Cookie', 'Authorization 已存储', '🎉 Cookie 获取成功');
-    } else {
-      console.log(`[${formatDateTime(new Date())}] ❌ 获取失败：未找到 Authorization 字段`);
-      $notify('淘气兔签到获取Cookie', '未找到 Authorization', '👆 请手动打开 App 进行一次签到');
-    }
-
-    console.log(`[${formatDateTime(new Date())}] 🛑 脚本执行结束`);
-    $done({});
-  }, 2000);
+  if (authorization) {
+    $prefs.setValueForKey(authorization, 'taoqitu_authorization');
+    console.log(`[${formatDateTime(new Date())}] ✅ 成功获取并存储 Authorization`);
+    $notify('淘气兔 Cookie 获取成功', '', 'Authorization 已保存，可用于后续签到');
+  } else {
+    console.log(`[${formatDateTime(new Date())}] ❌ 未发现 Authorization 字段`);
+    $notify('淘气兔 Cookie 获取失败', '', '未发现 Authorization 字段，请尝试重新进入 App 的签到页');
+  }
 } else {
-  console.log(`[${formatDateTime(new Date())}] ⚠️ 跳过 OPTIONS 请求`);
-  $done({});
+  console.log(`[${formatDateTime(new Date())}] ⚠️ 未能获取到请求头信息`);
 }
+
+$done({});
