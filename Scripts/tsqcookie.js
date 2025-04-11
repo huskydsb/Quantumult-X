@@ -1,4 +1,5 @@
-// 格式化日期时间为 YYYY-MM-DD HH:mm:ss 格式
+// 淘气兔 Cookie 获取脚本（Quantumult X 适配）
+
 function formatDateTime(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -9,42 +10,29 @@ function formatDateTime(date) {
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-
-// 检查请求方法
 if ($request.method !== 'OPTIONS') {
   console.log(`[${formatDateTime(new Date())}] 🚀 脚本开始执行，URL: ${$request.url}, Method: ${$request.method}`);
 
-  // 延时处理，等待一定时间再获取请求头
   setTimeout(() => {
-    // 获取请求头中的authorization字段
     const headers = $request.headers;
     const authorization = headers['authorization'];
 
-    // 记录日志：开始获取authorization
-    console.log(`[${formatDateTime(new Date())}] 📝 开始获取请求头中的Authorization字段`);
+    console.log(`[${formatDateTime(new Date())}] 📝 尝试获取 Authorization 字段`);
 
-    // 检查是否获取到authorization字段
     if (authorization) {
-      // 存储authorization到$persistentStore
-      $persistentStore.write(authorization, 'taoqitu_authorization');
+      const writeResult = $prefs.setValueForKey(authorization, 'taoqitu_authorization');
       console.log(`[${formatDateTime(new Date())}] ✅ 获取成功：Authorization 字段已存储`);
 
-      // 提示成功
-      $notification.post('淘气兔签到获取cookie', 'Authorization 已存储', '🎉cookie获取成功');
+      $notify('淘气兔签到获取Cookie', 'Authorization 已存储', '🎉 Cookie 获取成功');
     } else {
-      console.log(`[${formatDateTime(new Date())}] ❌ 获取失败：未找到Authorization字段`);
-
-      // 提示失败
-      $notification.post('淘气兔签到获取cookie', '未找到Authorization', '👆请手动签到一次');
+      console.log(`[${formatDateTime(new Date())}] ❌ 获取失败：未找到 Authorization 字段`);
+      $notify('淘气兔签到获取Cookie', '未找到 Authorization', '👆 请手动打开 App 进行一次签到');
     }
 
-    // 记录日志：脚本结束
     console.log(`[${formatDateTime(new Date())}] 🛑 脚本执行结束`);
-
-    // 返回原始响应
     $done({});
-  }, 2000);  // 延时 2 秒，您可以根据需要调整延时的时间（单位：毫秒）
+  }, 2000);
 } else {
-  console.log(`[${formatDateTime(new Date())}] 🚫 跳过OPTIONS请求`);
+  console.log(`[${formatDateTime(new Date())}] ⚠️ 跳过 OPTIONS 请求`);
   $done({});
 }
