@@ -51,12 +51,13 @@ fetchWithTimeout(requestParams)
             .then((response) => {
                 const htmlContent = response.body;
 
-                // 使用正则表达式提取 <pre> 标签中的内容
-                const preRegex = /<pre[^>]*>([\s\S]*?)<\/pre>/;
-                const preMatch = htmlContent.match(preRegex);
-                const preContent = preMatch ? preMatch[1] : null;
+               
+                 // 使用正则表达式提取 <pre> 标签中的内容
+                    let preRegex = /<pre[^>]*>([\s\S]*?)<\/pre>/i;
+                    let preMatch = data.match(preRegex);
+                    let preContent = preMatch ? preMatch[1] : null;
 
-                let score = "N/A";
+                    let score = "N/A";
                 let riskDescription = "未知风险";
                 let riskemoji = "⚪";
 
