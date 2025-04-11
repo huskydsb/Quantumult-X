@@ -1,8 +1,9 @@
 {
-    "name": "HUSKY 自用脚本合集",
-    "description": "Task Gallery",
-    "task": [
-        "event-interaction https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/scamalytics.js, tag=IP欺诈分查询, img-url=https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/img/scamalytics.png, enabled=true",
-        "5 0 * * * https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/dns.js, tag=𝑫𝒏𝒔 𝑪𝒍𝒆𝒂𝒓 𝑪𝒂𝒄𝒉𝒆, img-url=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Lab.png, enabled=true"
-    ]
+  "name": "HUSKY 自用脚本合集",
+  "description": "Task Gallery",
+  "task": [
+    "event-interaction https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/scamalytics.js, tag=IP欺诈分查询, img-url=https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/img/scamalytics.png, enabled=true",
+    "5 0 * * * https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/dns.js, tag=𝑫𝒏𝒔 𝑪𝒍𝒆𝒂𝒓 𝑪𝒂𝒄𝒉𝒆, img-url=https://raw.githubusercontent.com/Koolson/Qure/master/IconSet/Color/Lab.png, enabled=true",
+    "0 22 * * * https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/taoqituqd.js, tag=淘气兔签到定时任务, img-url=https://cdn-icons-png.flaticon.com/512/9361/9361991.png, enabled=true"
+  ]
 }
