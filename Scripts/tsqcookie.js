@@ -1,4 +1,4 @@
-// Quantumult X 获取 Authorization 脚本（适配 getSignList 接口）
+// Quantumult X 获取 Authorization（过滤预检请求，仅保存真实请求）
 
 function formatDateTime(date) {
   const year = date.getFullYear();
@@ -12,18 +12,21 @@ function formatDateTime(date) {
 
 if ($request && $request.headers) {
   const headers = $request.headers;
+  const method = $request.method || 'GET';
   const authorization = headers['Authorization'] || headers['authorization'];
+  const logTime = `[${formatDateTime(new Date())}]`;
 
-  console.log(`[${formatDateTime(new Date())}] 🛰 请求地址: ${$request.url}`);
-  console.log(`[${formatDateTime(new Date())}] 📝 请求头如下:\n${JSON.stringify(headers, null, 2)}`);
+  console.log(`${logTime} 🛰 请求地址: ${$request.url}`);
+  console.log(`${logTime} 📝 请求方法: ${method}`);
+  console.log(`${logTime} 📝 请求头如下:\n${JSON.stringify(headers, null, 2)}`);
 
-  if (authorization) {
-    $prefs.setValueForKey(authorization, 'taoqitu_authorization');
-    console.log(`[${formatDateTime(new Date())}] ✅ 成功获取并存储 Authorization`);
-    $notify('淘气兔 Cookie 获取成功', '', 'Authorization 已保存，可用于后续签到');
+  // 过滤 OPTIONS 预检请求 或 无 Authorization 的请求
+  if (method.toUpperCase() === 'OPTIONS' || !authorization) {
+    console.log(`${logTime} ⛔️ 跳过预检或无效请求`);
   } else {
-    console.log(`[${formatDateTime(new Date())}] ❌ 未发现 Authorization 字段`);
-    $notify('淘气兔 Cookie 获取失败', '', '未发现 Authorization 字段，请尝试重新进入 App 的签到页');
+    $prefs.setValueForKey(authorization, 'taoqitu_authorization');
+    console.log(`${logTime} ✅ 成功获取并存储 Authorization`);
+    $notify('淘气兔 Authorization 获取成功', '', '已保存，可用于后续操作');
   }
 } else {
   console.log(`[${formatDateTime(new Date())}] ⚠️ 未能获取到请求头信息`);
