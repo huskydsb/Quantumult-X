@@ -59,8 +59,12 @@ fetchWithTimeout(requestParams)
 
                 if (preContent) {
                     try {
-                        // 添加大括号，拼成完整 JSON
-                        preContent = `{${preContent}}`;
+                        // 规范 JSON 内容格式：去除尾逗号，补全大括号
+                        preContent = preContent.replace(/,\s*$/, "").trim();
+                        if (!preContent.startsWith("{")) {
+                            preContent = `{${preContent}}`;
+                        }
+
                         const parsedData = JSON.parse(preContent);
                         score = parsedData.score || "N/A";
                         const risk = parsedData.risk || "unknown";
@@ -87,7 +91,7 @@ fetchWithTimeout(requestParams)
                                 riskDescription = "未知风险";
                         }
                     } catch (e) {
-                        console.error("JSON解析错误:", e);
+                        console.error("JSON 解析失败:", e.message);
                     }
                 }
 
@@ -104,12 +108,7 @@ ISP组织: ${org}
 ASN信息: ${asInfo}
                 `;
 
-                const formattedMessage = logMessage
-                    .split('\n')
-                    .map(line => line.trimStart())
-                    .join('\n');
-
-                console.log(formattedMessage);
+                console.log(logMessage.trim());
 
                 const resultHtml = `
 <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
@@ -137,19 +136,17 @@ ASN信息: ${asInfo}
                 });
             })
             .catch((error) => {
-                console.error(error);
-                const errorMessage = "<p style='text-align: center;'>🔴 查询超时</p>";
+                console.error("第二阶段失败:", error.message);
                 $done({
                     title: "Scamalytics IP欺诈分查询",
-                    htmlMessage: errorMessage,
+                    htmlMessage: "<p style='text-align: center;'>🔴 第二阶段请求失败或超时</p>",
                 });
             });
     })
     .catch((error) => {
-        console.error(error);
-        const errorMessage = "<p style='text-align: center;'>🔴 查询超时</p>";
+        console.error("第一阶段失败:", error.message);
         $done({
             title: "Scamalytics IP欺诈分查询",
-            htmlMessage: errorMessage,
+            htmlMessage: "<p style='text-align: center;'>🔴 第一阶段请求失败或超时</p>",
         });
     });
