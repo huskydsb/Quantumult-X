@@ -35,17 +35,18 @@ fetchWithTimeout(requestParams)
         const org = ipInfo.org || "N/A";
         const asInfo = ipInfo.as || "N/A";
 
+        // 构建 Scamalytics 页面请求参数
         const scamRequestParams = {
             url: scamUrl + ip,
             headers: {
-                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
-                "Accept": "text/html",
+                "User-Agent": "Quantumult X",
             },
             opts: {
                 policy: $environment.params,
             },
         };
 
+        // 通过页面抓取获取欺诈分数和风险等级
         fetchWithTimeout(scamRequestParams)
             .then((response) => {
                 const htmlContent = response.body;
@@ -53,82 +54,93 @@ fetchWithTimeout(requestParams)
                 const preMatch = htmlContent.match(preRegex);
                 let preContent = preMatch ? preMatch[1].trim() : null;
 
-                let score = "N/A";
+                 let score = "N/A";
                 let riskDescription = "未知风险";
                 let riskemoji = "⚪";
 
                 if (preContent) {
-                    try {
-                        // 规范 JSON 内容格式：去除尾逗号，补全大括号
-                        preContent = preContent.replace(/,\s*$/, "").trim();
-                        if (!preContent.startsWith("{")) {
-                            preContent = `{${preContent}}`;
-                        }
+                    // 使用正则提取 JSON 字符串
+                    const jsonRegex = /({[\s\S]*?})/;
+                    const jsonMatch = preContent.match(jsonRegex);
 
-                        const parsedData = JSON.parse(preContent);
-                        score = parsedData.score || "N/A";
-                        const risk = parsedData.risk || "unknown";
+                    if (jsonMatch) {
+                        const jsonData = jsonMatch[1];
 
-                        switch (risk) {
-                            case "very high":
-                                riskemoji = "🔴";
-                                riskDescription = "非常高风险";
-                                break;
-                            case "high":
-                                riskemoji = "🟠";
-                                riskDescription = "高风险";
-                                break;
-                            case "medium":
-                                riskemoji = "🟡";
-                                riskDescription = "中等风险";
-                                break;
-                            case "low":
-                                riskemoji = "🟢";
-                                riskDescription = "低风险";
-                                break;
-                            default:
-                                riskemoji = "⚪";
-                                riskDescription = "未知风险";
+                        // 尝试解析 JSON 数据
+                        try {
+                            const parsedData = JSON.parse(jsonData);
+                            score = parsedData.score || "N/A";
+                            const risk = parsedData.risk || "unknown";
+
+                            // 根据风险等级设置描述和表情符号
+                            switch (risk) {
+                                case "very high":
+                                    riskemoji = "🔴";
+                                    riskDescription = "非常高风险";
+                                    break;
+                                case "high":
+                                    riskemoji = "🟠";
+                                    riskDescription = "高风险";
+                                    break;
+                                case "medium":
+                                    riskemoji = "🟡";
+                                    riskDescription = "中等风险";
+                                    break;
+                                case "low":
+                                    riskemoji = "🟢";
+                                    riskDescription = "低风险";
+                                    break;
+                                default:
+                                    riskemoji = "⚪";
+                                    riskDescription = "未知风险";
+                            }
+                        } catch (e) {
+                            console.error("JSON解析错误:", e);
                         }
-                    } catch (e) {
-                        console.error("JSON 解析失败:", e.message);
                     }
                 }
 
+                // 输出查询结果到控制台
                 const logMessage = `
-Scamalytics IP欺诈分查询:
-节点名称: ${nodeName}
-IP地址: ${ip}
-IP欺诈分数: ${score}
-IP风险等级: ${riskemoji} ${riskDescription}
-IP城市: ${city}
-IP国家: ${countryCode}
-ISP公司: ${isp}
-ISP组织: ${org}
-ASN信息: ${asInfo}
-                `;
+                Scamalytics IP欺诈分查询:
+                节点名称: ${nodeName}
+                IP地址: ${ip}
+                IP欺诈分数: ${score}
+                IP风险等级: ${riskemoji} ${riskDescription}
+                IP城市: ${city}
+                IP国家: ${countryCode}
+                ISP公司: ${isp}
+                ISP组织: ${org}
+                ASN信息: ${asInfo}
+            `;
 
-                console.log(logMessage.trim());
+                const formattedMessage = logMessage
+                    .split('\n')
+                    .map(line => line.trimStart())
+                    .join('\n');
 
+                console.log(formattedMessage);
+
+                // 构建结果页面
                 const resultHtml = `
-<p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
-    <br>&nbsp;&nbsp;&nbsp;-----------------------------------------------
-    <br><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP地址：</b>${ip}<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP城市：</b>${city}<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP国家：</b>${countryCode}<br>
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP公司：</b>${isp}<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP组织：</b>${org}<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN信息：</b>${asInfo}<br>
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP欺诈分数：</b>&nbsp;&nbsp;${score}<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP风险等级：</b>${riskemoji} ${riskDescription}<br>
-    <br>&nbsp;&nbsp;&nbsp;-----------------------------------------------
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span>
-</p>
-                `;
+        <p style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+            <br>&nbsp;&nbsp;&nbsp;-----------------------------------------------
+            <br><br> <!-- 空行 -->
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP地址：</b>${ip}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP城市：</b>${city}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP国家：</b>${countryCode}<br>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP公司：</b>${isp}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ISP组织：</b>${org}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>ASN信息：</b>${asInfo}<br>
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP欺诈分数：</b>&nbsp;&nbsp;${score}<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP风险等级：</b>${riskemoji} ${riskDescription}<br>
+            <br>&nbsp;&nbsp;&nbsp;-----------------------------------------------
+            <br>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b style="color: red;">节点：</b> ➟ <span style="color: red;">${nodeName}</span>
+        </p>
+        `;
 
                 $done({
                     title: "Scamalytics IP欺诈分查询",
@@ -136,17 +148,19 @@ ASN信息: ${asInfo}
                 });
             })
             .catch((error) => {
-                console.error("第二阶段失败:", error.message);
+                console.error(error);
+                const errorMessage = "<p style='text-align: center;'>🔴 查询超时</p>";
                 $done({
                     title: "Scamalytics IP欺诈分查询",
-                    htmlMessage: "<p style='text-align: center;'>🔴 第二阶段请求失败或超时</p>",
+                    htmlMessage: errorMessage,
                 });
             });
     })
     .catch((error) => {
-        console.error("第一阶段失败:", error.message);
+        console.error(error);
+        const errorMessage = "<p style='text-align: center;'>🔴 查询超时</p>";
         $done({
             title: "Scamalytics IP欺诈分查询",
-            htmlMessage: "<p style='text-align: center;'>🔴 第一阶段请求失败或超时</p>",
+            htmlMessage: errorMessage,
         });
     });
