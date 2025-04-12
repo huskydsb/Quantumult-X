@@ -38,7 +38,8 @@ fetchWithTimeout(requestParams)
         const scamRequestParams = {
             url: scamUrl + ip,
             headers: {
-                "User-Agent": "Quantumult X",
+                "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1",
+                "Accept": "text/html",
             },
             opts: {
                 policy: $environment.params,
@@ -50,7 +51,7 @@ fetchWithTimeout(requestParams)
                 const htmlContent = response.body;
                 const preRegex = /<pre[^>]*>([\s\S]*?)<\/pre>/i;
                 const preMatch = htmlContent.match(preRegex);
-                const preContent = preMatch ? preMatch[1].trim() : null;
+                let preContent = preMatch ? preMatch[1].trim() : null;
 
                 let score = "N/A";
                 let riskDescription = "未知风险";
@@ -58,6 +59,8 @@ fetchWithTimeout(requestParams)
 
                 if (preContent) {
                     try {
+                        // 添加大括号，拼成完整 JSON
+                        preContent = `{${preContent}}`;
                         const parsedData = JSON.parse(preContent);
                         score = parsedData.score || "N/A";
                         const risk = parsedData.risk || "unknown";
