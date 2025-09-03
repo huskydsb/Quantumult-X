@@ -17,7 +17,7 @@ if (typeof $request !== "undefined") {
     "Accept": "*/*",
     "Connection": "keep-alive",
     "Host": url.replace(/^https?:\/\//, "").split("/")[0],
-    "User-Agent": ua,
+    "User-Agent": Loon/877 CFNetwork/3860.100.1 Darwin/25.0.0,
     "Accept-Language": "zh-CN,zh-Hans;q=0.9",
     "X-Requested-With": "Loon"
     };
