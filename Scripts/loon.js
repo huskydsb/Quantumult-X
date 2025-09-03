@@ -1,58 +1,54 @@
 /******************************
 
 [Script]
-
 ^https:\/\/kelee\.one\/ url script-request-header https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/loon.js
-^https:\/\/kelee\.one\/.*\.(plx|js)$ url script-response-header https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/loon.js
+^https:\/\/kelee\.one\/.* url script-response-body https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/loon.js
 
 [MITM]
 hostname = kelee.one
 
 ********************************/
 
-function getTime() {
-    const now = new Date();
-    return now.toISOString().replace("T", " ").split(".")[0]; // YYYY-MM-DD HH:mm:ss
+function now() {
+    return new Date().toLocaleString("zh-CN", { hour12: false });
 }
 
 if (typeof $request !== "undefined") {
+    // 请求头修改
     let modifiedHeaders = {
         ...$request.headers,
         "Accept-Encoding": "gzip, deflate, br",
         "Accept": "*/*",
         "Connection": "keep-alive",
-        "Host": "kelee.one",
         "User-Agent": "Loon/877 CFNetwork/3860.100.1 Darwin/25.0.0",
         "Accept-Language": "zh-CN,zh-Hans;q=0.9",
         "X-Requested-With": "Loon"
     };
 
-    // 📔 打印请求日志
     console.log(`📔 [Request UA Rewrite]
-🕒 时间: ${getTime()}
+🕒 时间: ${now()}
 🔗 URL: ${$request.url}
 📝 UA: ${modifiedHeaders["User-Agent"]}
-🌐 Host: ${modifiedHeaders["Host"]}
+🌐 Host: ${$request.headers["Host"]}
 --------------------------------`);
 
     $done({ headers: modifiedHeaders });
 }
 
 if (typeof $response !== "undefined") {
+    // 响应头修改
     let modifiedHeaders = {
         ...$response.headers,
         "Content-Encoding": "identity",
     };
 
-    let body = $response.body;
+    let body = $response.body || "";
 
-    // 📔 打印响应日志（包含内容）
     console.log(`📔 [Response Modified]
-🕒 时间: ${getTime()}
-🔗 URL: ${$request.url}
+🕒 时间: ${now()}
 📦 Content-Encoding: ${modifiedHeaders["Content-Encoding"]}
 📄 Body 内容预览:
-${body ? body.slice(0, 300) : "空"}
+${body.slice(0, 300)}   // 截取前 300 个字符
 --------------------------------`);
 
     $done({ headers: modifiedHeaders, body: body });
