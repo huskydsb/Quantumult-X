@@ -13,12 +13,13 @@ hostname = kelee.one
 if (typeof $request !== "undefined") {
     let modifiedHeaders = {
         ...$request.headers,
-        'User-Agent': 'Loon/762 CFNetwork/1568.200.51 Darwin/24.1.0',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
-        'Connection': 'keep-alive',
-        'Host': 'kelee.one',
+        "Accept-Encoding": "gzip, deflate, br",
+    "Accept": "*/*",
+    "Connection": "keep-alive",
+    "Host": url.replace(/^https?:\/\//, "").split("/")[0],
+    "User-Agent": ua,
+    "Accept-Language": "zh-CN,zh-Hans;q=0.9",
+    "X-Requested-With": "Loon"
     };
 
     $done({ headers: modifiedHeaders });
