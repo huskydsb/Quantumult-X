@@ -1,4 +1,4 @@
-// 淘气兔签到（Quantumult X 兼容）
+// 淘气兔签到（Quantumult X 兼容，使用 Cookie）
 
 // 日志函数
 function log(message, data = "") {
@@ -6,14 +6,14 @@ function log(message, data = "") {
   console.log(`[${time}] ${message} ${data}`);
 }
 
-// 读取存储的 Authorization
-const authorization = $prefs.valueForKey('taoqitu_authorization');
+// 读取存储的 Cookie
+const cookie = $prefs.valueForKey('taoqitu_cookie');
 
-log("🔑 获取存储的Authorization", authorization ? "成功" : "失败");
+log("🔑 获取存储的Cookie", cookie ? "成功" : "失败");
 
-if (!authorization) {
-  log("⚠️ 错误", "未找到有效的Authorization，请先获取并存储Authorization");
-  $notify("淘气兔签到", "未找到有效的Authorization", "请先获取并存储Authorization");
+if (!cookie) {
+  log("⚠️ 错误", "未找到有效的Cookie，请先获取并存储Cookie");
+  $notify("淘气兔签到", "未找到有效的Cookie", "请先获取并存储Cookie");
   $done();
 }
 
@@ -23,7 +23,7 @@ const headers = {
   "accept-encoding": "gzip, deflate, br",
   "referer": "https://gtm-1003.91tutu.xyz",
   "origin": "https://gtm-1003.91tutu.xyz",
-  "authorization": authorization,
+  "cookie": cookie,
   "sec-fetch-mode": "cors",
   "accept-language": "zh-CN,zh-Hans;q=0.9",
   "user-agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_3_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/133.0.6943.33 Mobile/15E148 Safari/604.1",
