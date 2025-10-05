@@ -18,11 +18,11 @@ if (!authorization) {
 }
 
 // 请求参数
-const url = "https://api-cdn.taoqitu.me/gateway/tqt/cn/user/sign";
+const url = "https://gtm-1003.91tutu.xyz/gateway/tqt/cn/user/sign";
 const headers = {
   "accept-encoding": "gzip, deflate, br",
-  "referer": "https://vip.taoqitu.pro/",
-  "origin": "https://vip.taoqitu.pro",
+  "referer": "https://gtm-1003.91tutu.xyz",
+  "origin": "https://gtm-1003.91tutu.xyz",
   "authorization": authorization,
   "sec-fetch-mode": "cors",
   "accept-language": "zh-CN,zh-Hans;q=0.9",
