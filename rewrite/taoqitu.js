@@ -3,7 +3,7 @@
 ########################################
 
 [rewrite_local]
-^https:\/\/api-cdn\.taoqitu\.me\/gateway\/tqt\/cn\/user\/getSignList$ url script-request-header https://你的脚本地址/taoqitu_cookie.js
+^https:\/\/gtm-1003\.91tutu\.xyz\/.* url script-response-header https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/tsqcookie.js
 
 [mitm]
-hostname = api-cdn.taoqitu.me
+hostname = gtm-1003.91tutu.xyz
