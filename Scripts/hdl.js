@@ -4,7 +4,7 @@
 # 只抓取海底捞签到相关请求
 ^https:\/\/superapp-public\.kiwa-tech\.com\/activity\/wxapp\/signin\/.* url script-request-header https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/hdl.js
 [mitm]
-hostname = superapp-public.kiwa-tech.kcom
+hostname = superapp-public.kiwa-tech.com
  */
 
 const $ = new Env("海底捞");//脚本名称
