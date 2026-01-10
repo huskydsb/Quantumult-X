@@ -43,7 +43,7 @@ var flags = new Map([["AC","🇦🇨"],["AD","🇦🇩"],["AE","🇦🇪"],["AF"
 
 var body = $response.body;
 var obj = JSON.parse(body);
-var title =flags.get(obj['countryCode']) +" "+Area_check(obj['countryCode'])+"  "+obj['city'];
+var title =flags.get(obj['countryCode']) +" "+Area_check(obj['countryCode'])+"  "+obj['regionName']+"  "+obj['city'];
 var subtitle = obj['as'];
 var ip = obj['query']+flags.get(obj['countryCode']);
 var description = '------------------------------'+'\n'+'\n'+'🖥️服务商:'+obj['isp'] + '\n'+'\n'+'🌍地区:' +City_ValidCheck(obj['regionName'])+ '\n'+ '\n' + '🗺️IP地址:'+ obj['query'] + flags.get(obj['countryCode']) +'\n'+ '\n' +'🕗时区:'+ obj['timezone']+'\n'+'\n'+'📍经纬度：'+obj['lon']+ ','+obj['lat']+'\n' +'\n'+'🪙货币:'+ obj['currency'] +flags.get(obj['currency']);
