@@ -2,19 +2,24 @@
 # 嘉立创签到任务 - Quantumult X
 ########################################
 
-# ==========================
-# 捕获 AccessToken
-# ==========================
-^https:\/\/m\.jlc\.com\/api\/appPlatform\/center\/order\/setting\/list url request-header script-path=https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/jlctoken.js, requires-body=false, tag=嘉立创获取Token
-
+[rewrite_local]
 
 # ==========================
-# 每日签到任务（09:00）
+# 捕获 AccessToken（进入“我的”页面触发）
+# ==========================
+https:\/\/m\.jlc\.com\/api\/appPlatform\/center\/order\/setting\/list url request-header script-path=https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/jlctoken.js, requires-body=false, tag=嘉立创获取Token
+
+
+[task_local]
+
+# ==========================
+# 每日签到任务（每天09:00）
+# cron格式：分 时 日 月 周
 # ==========================
 0 9 * * * https://raw.githubusercontent.com/huskydsb/Quantumult-X/main/Scripts/jlc.js, tag=嘉立创签到, enabled=true
 
 
-# ==========================
-# MITM
-# ==========================
+[mitm]
 hostname = m.jlc.com
+
+不对啊，格式不对
