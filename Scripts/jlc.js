@@ -59,7 +59,7 @@ async function request(url, headers) {
 
 (async () => {
 
-    log("🚀", "========== 嘉立创签到开始 ==========");
+    log("🚀", "嘉立创签到开始");
 
     try {
 
@@ -195,7 +195,7 @@ async function request(url, headers) {
 
     } finally {
 
-        log("🏁", "========== 嘉立创签到结束 ==========");
+        log("🏁", "嘉立创签到结束 ");
         $.done();
 
     }
